@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AntiFraud</title>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+
+    <script type="text/javascript">
+        var xmlhttp=new XMLHttpRequest();
+        var url="https://api.turnip.exchange/islands/";
+        var type="GET";//方法
+        xmlhttp.open(type,url,true);//方法，接口，异步
+        xmlhttp.send();//发送请求
+        xmlhttp.onreadystatechange=function(){
+            if(xmlhttp.status==200&&xmlhttp.readyState==4){
+                var result=JSON.parse(xmlhttp.response);
+                console.log(result);//result即为接口返回给我们的数据具体进行处理可以封装一个方法
+
+                result.islands.sort(function(x,y){
+                    var val1 = x.turnipPrice;
+                    var val2 = y.turnipPrice;
+                    if (val1 < val2) {
+                        return 1;
+                    } else if (val1 > val2) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+                var content = "";
+                for (var i in result.islands){
+                    content+="turnipPrice:"+result.islands[i].turnipPrice+"<br>queued:"+result.islands[i].queued+"<br><a href='https://turnip.exchange/island/"+result.islands[i].turnipCode+"'>点击跳转</a><br>"
+                }
+                content="<div>"+content+"</div>";
+                // document.getElementById("tt").innerHTML = JSON.stringify(result.islands);
+                document.getElementById("tt").innerHTML=(content);
+                console.log(result.islands);//result即为接口返回给我们的数据具体进行处理可以封装一个方法
+                console.log(content);//result即为接口返回给我们的数据具体进行处理可以封装一个方法
+            }
+        }
+        function parseDom(arg) {
+
+            var objE = document.createElement("div");
+
+            objE.innerHTML = arg;
+
+            return objE.childNodes;
+
+        };
+    </script>
+</head>
+<body>
+<div id="tt"></div>
+</body>
+</html>
